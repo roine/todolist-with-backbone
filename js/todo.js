@@ -55,10 +55,7 @@ $(function(){
 	var id = collection.length > 0 ? collection.length+1 : 1;
 	if(collection.isEmpty())
 	console.log('Empty Collection');
-	else{
 
-
-	}
 
 
 	$('#newTodo').click(function(){
@@ -74,18 +71,24 @@ $(function(){
 	});
 
 	$('#todoBox #title').click(function(){
-		var position = -2;
+		var positionMin = "-4px";
+		var positionMax = "-60px";
 		var offset = $('#modifyInputBox').offset();
-		console.log(offset.top+', '+position)
-		if(offset.top === position){
-			$('#modifyInputBox').animate({'top':'-100px'})
-		}else if(offset.top !== position){
-			$('#modifyInputBox').animate({'top':'-2px'})
+		$('#save').removeClass('disabled')
+		if($(this).text() === $('#modifyInput').val()){
+			if(offset.top === parseInt(positionMin)){
+				$('#modifyInputBox').animate({'top':positionMax})
+			}else{
+				$('#modifyInputBox').animate({'top':positionMin})
+				$('#modifyInput').val($(this).text()).focus().select();
+			}
+		}else {
 			$('#modifyInput').val($(this).text()).focus().select();
-
 		}
 	});
-
+	
 	$('#save').click(function(){
+		$(this).addClass('disabled')
+		setTimeout("$('#modifyInputBox').animate({'top':positionMax})",1000)
 	})
 });
