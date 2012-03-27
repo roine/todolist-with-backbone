@@ -2,14 +2,28 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href='css/style.css'></link>
+	<link rel="stylesheet" type="text/css" href='css/bootstrap.min.css'></link>
 	<script src="js/vendor/JQuery.js"></script>
 	<script src="js/vendor/underscore.js"></script>
 	<script src="js/vendor/backbone.js"></script>
 	<script src="js/vendor/localStorage.js"></script>
+	<script src="js/vendor/bootstrap.min.js"></script>
 
 	<script src="js/todo.js"></script>
 </head>
 <body>
+
+	<script type="text/template" id="todoTemplate">
+	<span><%= id %></span>
+	<span><%= title %></span>
+
+	</script>
+
 	<div id='newTodo'>Create a new Todo</div>
+	<div id='modifyInputBox'><input id='modifyInput' class='input-xlarge'><button  id='save' class='btn btn-info'>Save</button></div>
+	<div id='wrap'>
+		<div id='todoBox' class='low'><div id='title'>vrooouuuummmm</div></div>
+		<div id='todoBox' class='low'><div id='title'>badabouuummmmm</div></div>
+	</div>
 </body>
 </html>
