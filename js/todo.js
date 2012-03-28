@@ -1,7 +1,6 @@
 
 $(function(){
 
-
 	window.Todo = Backbone.Model.extend({
 		defaults:{
 			id:1,
@@ -9,10 +8,6 @@ $(function(){
 			description:'Write a description...',
 			priority:'low',
 			created_at: Date.now()
-		},
-		validate: function(attr){
-			if(attr.title == '' || attr.description == '')
-			return 'pas cool';
 		},
 		initialize:function(){
 			console.log('New todo created!');
@@ -24,9 +19,12 @@ $(function(){
 
 	window.TodoCollection = Backbone.Collection.extend({
 		model: Todo,
-		localStorage : new Store("pml0"),
+		localStorage : new Store("pml0llgg"),
 		initialize:function(){
 			console.log('TodoCollection loaded');
+			this.bind('error', function(error){
+				console.log(error)
+			});
 		}
 
 	});
@@ -36,36 +34,41 @@ $(function(){
 		initialize:function(){
 			this.template = _.template($('#todoTemplate').html());
 			_.bindAll(this, 'render');
-			this.model.bind('change', this.render);
-			console.log('View Loaded')
+			this.collection.bind('change', this.render);
+			console.log('View Loaded');
+			this.bind('error', function(error){
+				console.log(error)
+			});
 		},
 		setModel:function(model){
 			this.model = model;
 			return this;
 		},
 		render:function(){
-			var renderedContent = this.template(this.model.toJSON());
+			var renderedContent = this.template({all: this.collection.toJSON()});
 			$(this.el).html(renderedContent);
 			return this;
 		}
 	});
-
+	
+	//Initialize the page
 	var task = new Array();
-	window.collection  =  new TodoCollection();
-	window.collection.fetch();	
-	var id = window.collection.length > 0 ? window.collection.length+1 : 1;
-	if(window.collection.isEmpty())
+	var c  =  new TodoCollection();
+	c.fetch();	
+	var id = c.length > 0 ? c.length+1 : 1;
+	var field_type, field_id, todo = '';
+	var edited = false;
+	$('#modifyInput').val('')
+	if(c.isEmpty())
 	console.log('Empty Collection');
 	else{
-		var view = new todoView({model:window.collection.get(1)});
-		view.render()
+		var v = new todoView({collection:c})
+		v.render()
 	}
-
-
-
-	$('#newTodo').click(function(){
+	
+	var createNewTodo = function(){
 		task[id] = new Todo({id:id});
-		if(collection.add(task[id]))
+		if(c.add(task[id]))
 		console.log('added in collection');
 		var taskSaved = task[id].save();
 		if(!task[id].save)
@@ -73,62 +76,71 @@ $(function(){
 		else
 		console.log('Successfully saved!')
 		id++;
-	});
-
-	$('#todoBox #title, #todoBox #description').click(function(){
-		getFieldInfo(this);
-		sendFieldInfoToInput();
-		toggleEditBox(this);
-	});
-
-	var type, id = '';
+	}
 
 	var getFieldInfo = function(that){
-		type = $(that).attr('id');
-		id = $('#todoBox #id').text();
+		field_type = $(that).attr('id');
+		field_id = $(that).parent().children("#id").text();
 	}
 
 	var sendFieldInfoToInput = function(){
 		var elem = $('#modifyInput');
-		elem.attr({'data-id':id, 'data-type':type})
+		elem.attr({'data-id':field_id, 'data-type':field_type})
 	}
 
 	var toggleEditBox = function(that){	
-		var positionMin = "-4px";
-		var positionMax = "-60px";
+		var positionDown = "-4px";
+		var positionUp = "-60px";
 		var offset = $('#modifyInputBox').offset();
-		$('#save').removeClass('disabled')
+		$('#save').removeClass('disabled');
 		if($(that).text() === $('#modifyInput').val() || $('#modifyInput').val() == ''){
-			if(offset.top === parseInt(positionMin)){
-				$('#modifyInputBox').animate({'top':positionMax})
+			if(offset.top === parseInt(positionDown)){
+				$('#modifyInputBox').animate({'top':positionUp})
 				$('#modifyInput').val('');
 			}else{
-				$('#modifyInputBox').animate({'top':positionMin})
+				$('#modifyInputBox').animate({'top':positionDown})
 				$('#modifyInput').val($(that).text()).focus().select();
 			}
 		}else {
 			$('#modifyInput').val($(that).text()).focus().select();
 		}
 	}
+
+	// ----------- Triggers ---------------
+
 	$('#save').click(function(){
 		$(this).addClass('disabled')
 		setTimeout("$('#modifyInputBox').animate({'top':'-60px'});$('#modifyInput').val('');",1000)
-		window.d.save();
-	})
+		
+		todo.save();
+		edited = true;	
+	});
 
-	$('#modifyInput').keyup(function(d){
-		window.d = collection.get(id)
-		switch(type){
+	$('#modifyInput').keyup(function(){
+		//error here
+		edited =true;
+		todo = todo === 'undefined' ? c.get(field_id) :todo;
+		console.log(todo)
+		switch(field_type){
 			case 'title':
-			window.d.set({title:$(this).val()})	;
+			todo.set({'title':$(this).val()});
 			break;
 			case 'description':
-			window.d.set({description:$(this).val()});
+			todo.set({'description':$(this).val()});
 			break;
 		}
 	})
 
+	$('#todoBox #title, #todoBox #description').click(function(){
+		getFieldInfo(this);
+		sendFieldInfoToInput();
+		toggleEditBox(this);
+		todo = c.get(field_id);
+	});
 
+	$('#newTodo').click(function(){
+		createNewTodo();
+	});
 
 /*Small activity tracker checking mouse movement*/
 window.idle = false;

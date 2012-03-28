@@ -4,8 +4,9 @@
 	<link rel="stylesheet" type="text/css" href='css/style.css'></link>
 	<link rel="stylesheet" type="text/css" href='css/bootstrap.min.css'></link>
 	<script src="js/vendor/JQuery.js"></script>
+
 	<script src="js/vendor/underscore.js"></script>
-	<script src="js/vendor/backbone.js"></script>
+		<script src="js/vendor/backbone.js"></script>
 	<script src="js/vendor/localStorage.js"></script>
 	<script src="js/vendor/bootstrap.min.js"></script>
 
@@ -14,15 +15,18 @@
 <body>
 
 	<script type="text/template" id="todoTemplate">
-	<div id='todoBox' class='low'>
-	<div id='title'><%=title%></div>
-	<div id='description'><%=description%></div>
-	<div id='id'><%=id%></div>
-	</div>
+	<% _.each(all, function(t){ %>
+		<div id='todoBox' class='low'>
+		<div id='title'><%=t.title%></div>
+		<div id='description'><%=t.description%></div>
+		<div id='id'><%=t.id%></div>
+		</div>
+	<% }); %>
+	
 	</script>
 
 	<div id='newTodo'>Create a new Todo</div>
-	<div id='modifyInputBox'><input id='modifyInput' value='' class='input-xlarge'><button  id='save' class='btn btn-info'>Save</button></div>
+	<div id='modifyInputBox'><input id='modifyInput' class='input-xlarge'><button  id='save' class='btn btn-info'>Save</button></div>
 	<div id='wrap'>
 		
 

@@ -3,6 +3,6 @@
 
 To do:
 
-*	Link the View and the Model
-
+*	Make it more MVC style
+*	Fixe bug: when editing field 
 
