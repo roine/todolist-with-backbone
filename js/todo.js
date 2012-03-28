@@ -92,12 +92,18 @@ $(function(){
 		$(this).addClass('disabled')
 		setTimeout("$('#modifyInputBox').animate({'top':positionMax})",1000)
 	})
-	
+
 /*Small activity tracker checking mouse move*/
 window.idle = false;
-var inactivity = 60000;
+var inactivity = 20000;
 var tidle=setTimeout(function(){window.idle = true}, inactivity);
-$(document).mousemove(function(){window.idle = false;$('body').animate({'opacity':'1'});clearTimeout(tidle);tidle=setTimeout(function(){window.idle = true}, inactivity)})
-var displayIdle = setInterval(function(){if(window.idle) $('body').animate({'opacity':'0'})}, 1000)
+$(document).mousemove(function(){
+	window.idle = false;
+	console.log($('body').css('opacity'))
+	if($('body').css('opacity') === '0')
+	$('body').animate({'opacity':'1'});
+	clearTimeout(tidle);
+	tidle=setTimeout(function(){window.idle = true}, inactivity)})
+	setInterval(function(){if(window.idle) $('body').animate({'opacity':'0'})}, 1000)
 });
 
