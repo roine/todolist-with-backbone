@@ -2,5 +2,7 @@
 ========
 
 To do:
-*   Fixe the bug when editing
-*	Create a simple activity tracker
+
+*	Link the View and the Model
+
+

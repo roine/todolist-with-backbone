@@ -75,9 +75,10 @@ $(function(){
 		var positionMax = "-60px";
 		var offset = $('#modifyInputBox').offset();
 		$('#save').removeClass('disabled')
-		if($(this).text() === $('#modifyInput').val()){
+		if($(this).text() === $('#modifyInput').val() || $('#modifyInput').val() == ''){
 			if(offset.top === parseInt(positionMin)){
 				$('#modifyInputBox').animate({'top':positionMax})
+				$('#modifyInput').val('');
 			}else{
 				$('#modifyInputBox').animate({'top':positionMin})
 				$('#modifyInput').val($(this).text()).focus().select();
@@ -86,9 +87,17 @@ $(function(){
 			$('#modifyInput').val($(this).text()).focus().select();
 		}
 	});
-	
+
 	$('#save').click(function(){
 		$(this).addClass('disabled')
 		setTimeout("$('#modifyInputBox').animate({'top':positionMax})",1000)
 	})
+	
+/*Small activity tracker checking mouse move*/
+window.idle = false;
+var inactivity = 60000;
+var tidle=setTimeout(function(){window.idle = true}, inactivity);
+$(document).mousemove(function(){window.idle = false;$('body').animate({'opacity':'1'});clearTimeout(tidle);tidle=setTimeout(function(){window.idle = true}, inactivity)})
+var displayIdle = setInterval(function(){if(window.idle) $('body').animate({'opacity':'0'})}, 1000)
 });
+
