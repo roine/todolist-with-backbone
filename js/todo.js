@@ -24,7 +24,7 @@ $(function(){
 
 	window.TodoCollection = Backbone.Collection.extend({
 		model: Todo,
-		localStorage : new Store("pml"),
+		localStorage : new Store("pml0"),
 		initialize:function(){
 			console.log('TodoCollection loaded');
 		}
@@ -93,17 +93,20 @@ $(function(){
 		setTimeout("$('#modifyInputBox').animate({'top':positionMax})",1000)
 	})
 
-/*Small activity tracker checking mouse move*/
+/*Small activity tracker checking mouse movement*/
 window.idle = false;
-var inactivity = 20000;
-var tidle=setTimeout(function(){window.idle = true}, inactivity);
+var inactivity = 60000;
+tidle=setTimeout(function(){window.idle = true;}, inactivity);
+/*hide element if idle*/
+setInterval(function(){if(window.idle) $('body').animate({'opacity':'0'})}, 1000)
+
 $(document).mousemove(function(){
 	window.idle = false;
-	console.log($('body').css('opacity'))
 	if($('body').css('opacity') === '0')
 	$('body').animate({'opacity':'1'});
 	clearTimeout(tidle);
-	tidle=setTimeout(function(){window.idle = true}, inactivity)})
-	setInterval(function(){if(window.idle) $('body').animate({'opacity':'0'})}, 1000)
+	setTimeout(function(){window.idle = true}, inactivity);	
 });
 
+
+});
