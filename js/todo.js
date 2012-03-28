@@ -32,11 +32,12 @@ $(function(){
 	});
 
 	window.todoView = Backbone.View.extend({
-		el:$('#todoBox'),
-		initiliaze:function(){
-			this.template = _.template('#todoTemplate').html();
+		el:$('#wrap'),
+		initialize:function(){
+			this.template = _.template($('#todoTemplate').html());
 			_.bindAll(this, 'render');
 			this.model.bind('change', this.render);
+			console.log('View Loaded')
 		},
 		setModel:function(model){
 			this.model = model;
@@ -50,11 +51,15 @@ $(function(){
 	});
 
 	var task = new Array();
-	var collection  =  new TodoCollection();
-	collection.fetch();
-	var id = collection.length > 0 ? collection.length+1 : 1;
-	if(collection.isEmpty())
+	window.collection  =  new TodoCollection();
+	window.collection.fetch();	
+	var id = window.collection.length > 0 ? window.collection.length+1 : 1;
+	if(window.collection.isEmpty())
 	console.log('Empty Collection');
+	else{
+		var view = new todoView({model:window.collection.get(1)});
+		view.render()
+	}
 
 
 
@@ -70,35 +75,67 @@ $(function(){
 		id++;
 	});
 
-	$('#todoBox #title').click(function(){
+	$('#todoBox #title, #todoBox #description').click(function(){
+		getFieldInfo(this);
+		sendFieldInfoToInput();
+		toggleEditBox(this);
+	});
+
+	var type, id = '';
+
+	var getFieldInfo = function(that){
+		type = $(that).attr('id');
+		id = $('#todoBox #id').text();
+	}
+
+	var sendFieldInfoToInput = function(){
+		var elem = $('#modifyInput');
+		elem.attr({'data-id':id, 'data-type':type})
+	}
+
+	var toggleEditBox = function(that){	
 		var positionMin = "-4px";
 		var positionMax = "-60px";
 		var offset = $('#modifyInputBox').offset();
 		$('#save').removeClass('disabled')
-		if($(this).text() === $('#modifyInput').val() || $('#modifyInput').val() == ''){
+		if($(that).text() === $('#modifyInput').val() || $('#modifyInput').val() == ''){
 			if(offset.top === parseInt(positionMin)){
 				$('#modifyInputBox').animate({'top':positionMax})
 				$('#modifyInput').val('');
 			}else{
 				$('#modifyInputBox').animate({'top':positionMin})
-				$('#modifyInput').val($(this).text()).focus().select();
+				$('#modifyInput').val($(that).text()).focus().select();
 			}
 		}else {
-			$('#modifyInput').val($(this).text()).focus().select();
+			$('#modifyInput').val($(that).text()).focus().select();
 		}
-	});
-
+	}
 	$('#save').click(function(){
 		$(this).addClass('disabled')
-		setTimeout("$('#modifyInputBox').animate({'top':positionMax})",1000)
+		setTimeout("$('#modifyInputBox').animate({'top':'-60px'});$('#modifyInput').val('');",1000)
+		window.d.save();
 	})
+
+	$('#modifyInput').keyup(function(d){
+		window.d = collection.get(id)
+		switch(type){
+			case 'title':
+			window.d.set({title:$(this).val()})	;
+			break;
+			case 'description':
+			window.d.set({description:$(this).val()});
+			break;
+		}
+	})
+
+
 
 /*Small activity tracker checking mouse movement*/
 window.idle = false;
 var inactivity = 60000;
 tidle=setTimeout(function(){window.idle = true;}, inactivity);
 /*hide element if idle*/
-setInterval(function(){if(window.idle) $('body').animate({'opacity':'0'})}, 1000)
+setInterval(function(){if(window.idle && $('body').css('opacity') === '1') $('body').animate({'opacity':'0'})}, 1000)
 
 $(document).mousemove(function(){
 	window.idle = false;
