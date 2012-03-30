@@ -9,7 +9,7 @@ $(function(){
 			priority:'low',
 			created_at: Date.now()
 		},
-		initialize:function(){
+		initialize:function(a){
 			console.log('New todo created!');
 			this.bind('error', function(error){
 				console.log(error)
@@ -19,7 +19,7 @@ $(function(){
 
 	window.TodoCollection = Backbone.Collection.extend({
 		model: Todo,
-		localStorage : new Store("pml0llgg"),
+		localStorage : new Store("plm"),
 		initialize:function(){
 			console.log('TodoCollection loaded');
 			this.bind('error', function(error){
@@ -35,10 +35,58 @@ $(function(){
 			this.template = _.template($('#todoTemplate').html());
 			_.bindAll(this, 'render');
 			this.collection.bind('change', this.render);
+			this.collection.bind('add', this.render);
 			console.log('View Loaded');
 			this.bind('error', function(error){
 				console.log(error)
 			});
+		},
+		events:{
+			"click #newTodo": "createTodo",
+			"click #todoBox #title, #todoBox #description": "toggleEditBox",
+			"keyup #modifyInput": "editTodo"
+		},
+		createTodo:function(){
+			todo = new Todo({id:id})
+			todo.save();
+			c.add(todo);
+			id++;
+		},
+		toggleEditBox:function(e){
+			var text = e.target.innerHTML;
+			var positionDown = "-4px";
+			var positionUp = "-60px";
+			var offset = $('#modifyInputBox').offset();
+			var previous_id = $('#modifyInput').attr('data-id');
+			var previous_type = $('#modifyInput').attr('data-type');
+			// get id and field type
+			field_type = $(e.currentTarget).attr('id');
+			field_id = $(e.currentTarget).parent().children("#id").text();
+			// set id and field type to the modifyInput
+
+			$('#save').removeClass('disabled');
+			$('#modifyInput').attr({'data-type':field_type, 'data-id': field_id});
+			if((field_type == previous_type &&  field_id == previous_id) || $('#modifyInput').val() == '' && !editing || true){
+				if(offset.top === parseInt(positionDown)){
+					$('#modifyInputBox').animate({'top':positionUp})
+					$('#modifyInput').val('');
+				}else{
+					$('#modifyInputBox').animate({'top':positionDown})
+					$('#modifyInput').val(text).focus().select();
+				}
+			}else {
+				$('#modifyInput').val(text).focus().select();
+			}
+		},
+		editTodo:function(e){
+			var t = c.get(field_id);
+			var elem = $('#modifyInput');
+			if(e.keyCode === 13){
+				if(field_type == 'title')
+				t.set({'title': elem.val()})
+				else if(field_type == 'description')
+				t.set({'description': elem.val()})
+			}
 		},
 		setModel:function(model){
 			this.model = model;
@@ -50,97 +98,33 @@ $(function(){
 			return this;
 		}
 	});
-	
+
 	//Initialize the page
 	var task = new Array();
 	var c  =  new TodoCollection();
 	c.fetch();	
 	var id = c.length > 0 ? c.length+1 : 1;
 	var field_type, field_id, todo = '';
-	var edited = false;
+	var editing = false;
 	$('#modifyInput').val('')
 	if(c.isEmpty())
 	console.log('Empty Collection');
-	else{
-		var v = new todoView({collection:c})
-		v.render()
-	}
-	
-	var createNewTodo = function(){
-		task[id] = new Todo({id:id});
-		if(c.add(task[id]))
-		console.log('added in collection');
-		var taskSaved = task[id].save();
-		if(!task[id].save)
-		console.log('Fail saving');
-		else
-		console.log('Successfully saved!')
-		id++;
-	}
+	var v = new todoView({collection:c})
+	v.render()
 
-	var getFieldInfo = function(that){
-		field_type = $(that).attr('id');
-		field_id = $(that).parent().children("#id").text();
-	}
-
-	var sendFieldInfoToInput = function(){
-		var elem = $('#modifyInput');
-		elem.attr({'data-id':field_id, 'data-type':field_type})
-	}
-
-	var toggleEditBox = function(that){	
-		var positionDown = "-4px";
-		var positionUp = "-60px";
-		var offset = $('#modifyInputBox').offset();
-		$('#save').removeClass('disabled');
-		if($(that).text() === $('#modifyInput').val() || $('#modifyInput').val() == ''){
-			if(offset.top === parseInt(positionDown)){
-				$('#modifyInputBox').animate({'top':positionUp})
-				$('#modifyInput').val('');
-			}else{
-				$('#modifyInputBox').animate({'top':positionDown})
-				$('#modifyInput').val($(that).text()).focus().select();
-			}
-		}else {
-			$('#modifyInput').val($(that).text()).focus().select();
-		}
-	}
 
 	// ----------- Triggers ---------------
 
-	$('#save').click(function(){
-		$(this).addClass('disabled')
-		setTimeout("$('#modifyInputBox').animate({'top':'-60px'});$('#modifyInput').val('');",1000)
-		
-		todo.save();
-		edited = true;	
-	});
+	// $('#save').click(function(){
+		// 		$(this).addClass('disabled')
+		// 		setTimeout("$('#modifyInputBox').animate({'top':'-60px'});$('#modifyInput').val('');",1000)
+		// 
+		// 		todo.save();
+		// 		editing = true;	
+		// 	});
 
-	$('#modifyInput').keyup(function(){
-		//error here
-		edited =true;
-		todo = todo === 'undefined' ? c.get(field_id) :todo;
-		console.log(todo)
-		switch(field_type){
-			case 'title':
-			todo.set({'title':$(this).val()});
-			break;
-			case 'description':
-			todo.set({'description':$(this).val()});
-			break;
-		}
-	})
 
-	$('#todoBox #title, #todoBox #description').click(function(){
-		getFieldInfo(this);
-		sendFieldInfoToInput();
-		toggleEditBox(this);
-		todo = c.get(field_id);
-	});
 
-	$('#newTodo').click(function(){
-		createNewTodo();
-	});
 
 /*Small activity tracker checking mouse movement*/
 window.idle = false;
@@ -159,3 +143,18 @@ $(document).mousemove(function(){
 
 
 });
+
+var formattedDate =function(ts){
+	var date, hours, minutes, date1, day, day_array, month, month_array, year = '';
+	date = new Date(ts);
+	hours = date.getHours();
+	minutes = date.getMinutes();
+	minutes = minutes < 10 ? '0'+minutes : minutes;
+	date1 = date.getDate();
+	day_array = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	day = day_array[date.getDay()];
+	month_array = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+	month = month_array[date.getMonth()];
+	year = date.getFullYear();
+	return 'Created at '+hours+':'+minutes+', '+day+' '+date1+' '+month+' '+year;
+}

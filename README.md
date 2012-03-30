@@ -3,6 +3,6 @@
 
 To do:
 
-*	Make it more MVC style
-*	Fixe bug: when editing field 
+
+*	Fix bug on creating todo
 
