@@ -19,7 +19,7 @@ $(function(){
 
 	window.TodoCollection = Backbone.Collection.extend({
 		model: Todo,
-		localStorage : new Store("p"),
+		localStorage : new Store("sophie"),
 		initialize:function(){
 			console.log('TodoCollection loaded');
 			this.bind('error', function(error){
@@ -66,7 +66,7 @@ $(function(){
 
 			$('#save').removeClass('disabled');
 			$('#modifyInput').attr({'data-type':field_type, 'data-id': field_id});
-			if((field_type == previous_type &&  field_id == previous_id) || $('#modifyInput').val() == '' && !editing || true){
+			if((field_type == previous_type &&  field_id == previous_id) || $('#modifyInput').val() == '' && !editing){
 				if(offset.top === parseInt(positionDown)){
 					$('#modifyInputBox').animate({'top':positionUp})
 					$('#modifyInput').val('');
