@@ -19,7 +19,7 @@ $(function(){
 
 	window.TodoCollection = Backbone.Collection.extend({
 		model: Todo,
-		localStorage : new Store("plm"),
+		localStorage : new Store("p"),
 		initialize:function(){
 			console.log('TodoCollection loaded');
 			this.bind('error', function(error){
@@ -87,6 +87,7 @@ $(function(){
 				else if(field_type == 'description')
 				t.set({'description': elem.val()})
 			}
+			t.save();
 		},
 		setModel:function(model){
 			this.model = model;
