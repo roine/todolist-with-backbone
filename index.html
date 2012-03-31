@@ -6,7 +6,7 @@
 	<script src="js/vendor/JQuery.js"></script>
 
 	<script src="js/vendor/underscore.js"></script>
-		<script src="js/vendor/backbone.js"></script>
+	<script src="js/vendor/backbone.js"></script>
 	<script src="js/vendor/localStorage.js"></script>
 	<script src="js/vendor/bootstrap.min.js"></script>
 
@@ -16,16 +16,16 @@
 <script>
 
 </script>
-	<script type="text/template" id="todoTemplate">
-	<div id='newTodo'>Create a new Todo</div>
-	<div id='modifyInputBox'><input id='modifyInput' class='input-xlarge'><button  id='save' class='btn btn-info'>Save</button></div>
-	<% _.each(all, function(t){ %>
-		<div id='todoBox' class='low'>
-		<div id='title'><%=t.title%></div>
-		<div id='description'><%=t.description%></div>
-		<div id='id'><%=t.id%></div>
-		<div id='created_at'><%=formattedDate(t.created_at)%></div>
-		</div>
+<script type="text/template" id="todoTemplate">
+<div id='newTodo'>Create a new Todo</div>
+<div id='modifyInputBox'><input id='modifyInput' class='input-xlarge'><!--<button  id='save' class='btn btn-info'>Save</button>--></div>
+<% _.each(all, function(t){ %>
+	<div id='todoBox' class='low'>
+	<div id='title'><%=t.title%></div>
+	<div id='description'><%=t.description%></div>
+	<div id='id'><%=t.id%></div>
+	<div id='created_at'><%=formattedDate(t.created_at)%></div>
+	</div>
 	<% }); %>
 	<% 
 	%>

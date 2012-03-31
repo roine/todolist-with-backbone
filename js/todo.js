@@ -47,7 +47,7 @@ $(function(){
 			"keyup #modifyInput": "editTodo"
 		},
 		createTodo:function(){
-			var todo = new Todo({id:id})
+			todo = new Todo({id:id})
 			c.add(todo);
 			todo.save();
 			id++;
@@ -135,11 +135,11 @@ tidle=setTimeout(function(){window.idle = true;}, inactivity);
 setInterval(function(){if(window.idle && $('body').css('opacity') === '1') $('body').animate({'opacity':'0'})}, 1000)
 
 $(document).mousemove(function(){
-	window.idle = false;
-	if($('body').css('opacity') === '0')
-	$('body').animate({'opacity':'1'});
-	clearTimeout(tidle);
-	setTimeout(function(){window.idle = true}, inactivity);	
+window.idle = false;
+if($('body').css('opacity') === '0')
+$('body').animate({'opacity':'1'});
+clearTimeout(tidle);
+setTimeout(function(){window.idle = true}, inactivity);	
 });
 //*/
 
