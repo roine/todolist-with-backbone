@@ -47,7 +47,7 @@ $(function(){
 			"keyup #modifyInput": "editTodo"
 		},
 		createTodo:function(){
-			todo = new Todo({id:id})
+			var todo = new Todo({id:id})
 			c.add(todo);
 			todo.save();
 			id++;
@@ -61,7 +61,7 @@ $(function(){
 			var previous_type = $('#modifyInput').attr('data-type');
 			// get id and field type
 			field_type = $(e.currentTarget).attr('id');
-			field_id = $(e.currentTarget).parent().children("#id").text();
+			field_id = parseInt($(e.currentTarget).parent().children("#sub").children("#id").text());
 			// set id and field type to the modifyInput
 
 			$('#save').removeClass('disabled');
@@ -79,6 +79,7 @@ $(function(){
 			}
 		},
 		editTodo:function(e){
+			console.log(field_id)
 			var t = c.get(field_id);
 			var elem = $('#modifyInput');
 			if(e.keyCode === 13){
@@ -94,7 +95,7 @@ $(function(){
 			return this;
 		},
 		render:function(){
-			var renderedContent = this.template({all: this.collection.toJSON()});
+			var renderedContent = this.template({all: this.collection.toJSON().reverse()});
 			$(this.el).html(renderedContent);
 			return this;
 		}

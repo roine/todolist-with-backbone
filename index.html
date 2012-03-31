@@ -21,10 +21,17 @@
 <div id='modifyInputBox'><input id='modifyInput' class='input-xlarge'><!--<button  id='save' class='btn btn-info'>Save</button>--></div>
 <% _.each(all, function(t){ %>
 	<div id='todoBox' class='low'>
+	<div id='left'>
+	<div id='priority'><%=t.priority%></div>
+	</div>
+	<div id ='right'>
 	<div id='title'><%=t.title%></div>
 	<div id='description'><%=t.description%></div>
+	<div id='sub'>
 	<div id='id'><%=t.id%></div>
 	<div id='created_at'><%=formattedDate(t.created_at)%></div>
+	</div>
+	</div>
 	</div>
 	<% }); %>
 	<% 
