@@ -47,9 +47,9 @@ $(function(){
 			"keyup #modifyInput": "editTodo"
 		},
 		createTodo:function(){
-			todo = new Todo({id:id})
-			todo.save();
+			var todo = new Todo({id:id})
 			c.add(todo);
+			todo.save();
 			id++;
 		},
 		toggleEditBox:function(e){
@@ -105,7 +105,7 @@ $(function(){
 	var c  =  new TodoCollection();
 	c.fetch();	
 	var id = c.length > 0 ? c.length+1 : 1;
-	var field_type, field_id, todo = '';
+	var field_type, field_id;
 	var editing = false;
 	$('#modifyInput').val('')
 	if(c.isEmpty())
@@ -126,12 +126,12 @@ $(function(){
 
 
 
+/*
 
-/*Small activity tracker checking mouse movement*/
 window.idle = false;
 var inactivity = 60000;
 tidle=setTimeout(function(){window.idle = true;}, inactivity);
-/*hide element if idle*/
+
 setInterval(function(){if(window.idle && $('body').css('opacity') === '1') $('body').animate({'opacity':'0'})}, 1000)
 
 $(document).mousemove(function(){
@@ -141,7 +141,7 @@ $(document).mousemove(function(){
 	clearTimeout(tidle);
 	setTimeout(function(){window.idle = true}, inactivity);	
 });
-
+//*/
 
 });
 
