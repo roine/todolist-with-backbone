@@ -3,12 +3,15 @@
 <head>
 	<link rel="stylesheet" type="text/css" href='css/style.css'></link>
 	<link rel="stylesheet" type="text/css" href='css/bootstrap.min.css'></link>
-	<script src="js/vendor/JQuery.js"></script>
+	<link rel="stylesheet" type="text/css" href='css/humanity/jquery-ui-1.8.18.custom.css'></link>
 
+	<script src="js/vendor/JQuery.js"></script>
 	<script src="js/vendor/underscore.js"></script>
 	<script src="js/vendor/backbone.js"></script>
 	<script src="js/vendor/localStorage.js"></script>
 	<script src="js/vendor/bootstrap.min.js"></script>
+	<script src="js/vendor/jquery-ui-1.8.18.custom.min.js"></script>
+
 
 	<script src="js/todo.js"></script>
 </head>
@@ -20,9 +23,9 @@
 <div id='newTodo'>Create a new Todo</div>
 <div id='modifyInputBox'><input id='modifyInput' class='input-xlarge'><!--<button  id='save' class='btn btn-info'>Save</button>--></div>
 <% _.each(all, function(t){ %>
-	<div id='todoBox' class='low'>
+	<div id='todoBox' class='<%= t.priority%>'>
 	<div id='left'>
-	<div id='priority'><%=t.priority%></div>
+	<div id='priority'></div>
 	</div>
 	<div id ='right'>
 	<div id='title'><%=t.title%></div>

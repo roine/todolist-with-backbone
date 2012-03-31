@@ -6,7 +6,7 @@ $(function(){
 			id:1,
 			title:'Choose a title',
 			description:'Write a description...',
-			priority:'low',
+			priority:'high',
 			created_at: Date.now()
 		},
 		initialize:function(a){
@@ -44,7 +44,8 @@ $(function(){
 		events:{
 			"click #newTodo": "createTodo",
 			"click #todoBox #title, #todoBox #description": "toggleEditBox",
-			"keyup #modifyInput": "editTodo"
+			"keyup #modifyInput": "editTodo",
+			"slidechange #priority": "editPriority"
 		},
 		createTodo:function(){
 			var todo = new Todo({id:id})
@@ -79,7 +80,6 @@ $(function(){
 			}
 		},
 		editTodo:function(e){
-			console.log(field_id)
 			var t = c.get(field_id);
 			var elem = $('#modifyInput');
 			if(e.keyCode === 13){
@@ -89,6 +89,16 @@ $(function(){
 				t.set({'description': elem.val()})
 			}
 			t.save();
+		},
+		editPriority:function(e,u){
+			var previous = $('#todoBox').is('.low') ? 1 : $('#todoBox').is('.mid') ? 2 : $('#todoBox').is('.high') ? 3 : 1;
+			var field_id = $('#todoBox').children("#right").children('#sub').children("#id").text();
+			prio = u.value == 3 ? 'high' : u.value == 2 ? 'mid' : u.value == 1 ? 'low' : 'low'
+			console.log(field_id)
+			var t = c.get(field_id);
+			t.set({'priority': prio})
+			t.save();
+			
 		},
 		setModel:function(model){
 			this.model = model;
@@ -144,6 +154,13 @@ setTimeout(function(){window.idle = true}, inactivity);
 });
 //*/
 
+	var actualPriority = $('#todoBox').is('.low') ? 1 : $('#todoBox').is('.mid') ? 2 : $('#todoBox').is('.high') ? 3 : 1;
+	$("#priority").each(function(){
+		$(this).css({'background':'grey'})
+	})
+	$("#priority").slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriority});
+
+/*end of onload*/
 });
 
 var formattedDate =function(ts){
