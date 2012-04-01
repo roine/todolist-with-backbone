@@ -7,7 +7,7 @@ V1.1 *coming soon*
 - Delete todo
 - priority editing with sliding bar
 - color accorded with the priority
-- order DESC *done*
+- order ASC *done*
 - Update the UI
 
 

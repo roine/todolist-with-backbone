@@ -16,16 +16,16 @@
 	<script src="js/todo.js"></script>
 </head>
 <body>
-<script>
 
-</script>
 <script type="text/template" id="todoTemplate">
+
+
 <div id='newTodo'>Create a new Todo</div>
 <div id='modifyInputBox'><input id='modifyInput' class='input-xlarge'><!--<button  id='save' class='btn btn-info'>Save</button>--></div>
 <% _.each(all, function(t){ %>
-	<div id='todoBox' class='<%= t.priority%>'>
+	<div id='todoBox' class='<%= t.priority%>' data-id='<%=t.id%>'>
 	<div id='left'>
-	<div id='priority'></div>
+	<div id='priority' style='top:60px'></div>
 	</div>
 	<div id ='right'>
 	<div id='title'><%=t.title%></div>

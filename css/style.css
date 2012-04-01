@@ -5,15 +5,16 @@
 
 #todoBox{width:40%;margin:20px;display:inline-block;padding:10px 35px;border-radius:5px;height:200px;}
 #todoBox.low{border:1px solid #5387AE;background:rgba(159,189,215,.5);}
-#todoBox .high{background:rgba(195,124,130,.5);}
-#todoBox #title{text-transform:uppercase;font-size:26px;cursor:pointer;height:60px;overflow:hidden;}
-#todoBox #description{cursor:pointer;overflow:hidden;height:120px;}
+#todoBox.mid{background:rgba(97,174,36,.5);border:1px solid rgb(97,174,36);}
+#todoBox.high{background:rgba(195,124,130,.5);border:1px solid rgb(195,124,130);}
+#todoBox #title{text-transform:uppercase;font-size:26px;cursor:pointer;height:55px;overflow:hidden;}
+#todoBox #description{cursor:pointer;overflow:hidden;height:117px;}
 #todoBox #created_at{font-style:italic;font-size:13px;float:left;}
 #todoBox #id{font-size:12px;float:right;}
 
 #todoBox #left{float:left;width:10%;border-right:1px dashed grey;padding:0 5px;height:100%;}
 #todoBox #right{float:right;width:85%;padding:5px;}
-#todoBox #sub{position:relative;z-index:1;}
+#todoBox #sub{position:relative;z-index:1;padding:10px 0;}
 
 #modifyInputBox{padding:10px;width:400px;background:#D2D1CF;top:-60px;position:fixed;left:300px;text-align:center;border-radius:0 0 5px 5px;box-shadow:0 2px 3px rgba(0,0,0,.5);}
 #modifyInputBox #modifyInput{margin-right:20px;}

@@ -6,7 +6,7 @@ $(function(){
 			id:1,
 			title:'Choose a title',
 			description:'Write a description...',
-			priority:'high',
+			priority:'low',
 			created_at: Date.now()
 		},
 		initialize:function(a){
@@ -34,12 +34,13 @@ $(function(){
 		initialize:function(){
 			this.template = _.template($('#todoTemplate').html());
 			_.bindAll(this, 'render');
-			this.collection.bind('change', this.render);
+			this.collection.bind('change',this.render);
 			this.collection.bind('add', this.render);
 			console.log('View Loaded');
 			this.bind('error', function(error){
 				console.log(error)
 			});
+			
 		},
 		events:{
 			"click #newTodo": "createTodo",
@@ -91,14 +92,20 @@ $(function(){
 			t.save();
 		},
 		editPriority:function(e,u){
+			e.stopPropagation();
 			var previous = $('#todoBox').is('.low') ? 1 : $('#todoBox').is('.mid') ? 2 : $('#todoBox').is('.high') ? 3 : 1;
-			var field_id = $('#todoBox').children("#right").children('#sub').children("#id").text();
+			var field_id = $(e.currentTarget).parent().parent().attr('data-id');
 			prio = u.value == 3 ? 'high' : u.value == 2 ? 'mid' : u.value == 1 ? 'low' : 'low'
-			console.log(field_id)
 			var t = c.get(field_id);
 			t.set({'priority': prio})
 			t.save();
 			
+		},
+		initPriority:function(){
+				var actualPriority = $('#todoBox').is('.low') ? 1 : $('#todoBox').is('.mid') ? 2 : $('#todoBox').is('.high') ? 3 : 1;
+				$("#todoBox #left #priority").each(function(i, e){
+				$(this).slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriority});
+			})
 		},
 		setModel:function(model){
 			this.model = model;
@@ -108,6 +115,7 @@ $(function(){
 			var renderedContent = this.template({all: this.collection.toJSON().reverse()});
 			$(this.el).html(renderedContent);
 			return this;
+			
 		}
 	});
 
@@ -154,11 +162,12 @@ setTimeout(function(){window.idle = true}, inactivity);
 });
 //*/
 
-	var actualPriority = $('#todoBox').is('.low') ? 1 : $('#todoBox').is('.mid') ? 2 : $('#todoBox').is('.high') ? 3 : 1;
-	$("#priority").each(function(){
-		$(this).css({'background':'grey'})
-	})
-	$("#priority").slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriority});
+var actualPriority = $('#todoBox').is('.low') ? 1 : $('#todoBox').is('.mid') ? 2 : $('#todoBox').is('.high') ? 3 : 1;
+	$("#todoBox #left #priority").each(function(i, e){
+	$(this).slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriority});
+})
+
+//$("#priority").slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriority});
 
 /*end of onload*/
 });
