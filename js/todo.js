@@ -92,20 +92,12 @@ $(function(){
 			t.save();
 		},
 		editPriority:function(e,u){
-			e.stopPropagation();
 			var previous = $('#todoBox').is('.low') ? 1 : $('#todoBox').is('.mid') ? 2 : $('#todoBox').is('.high') ? 3 : 1;
 			var field_id = $(e.currentTarget).parent().parent().attr('data-id');
 			prio = u.value == 3 ? 'high' : u.value == 2 ? 'mid' : u.value == 1 ? 'low' : 'low'
 			var t = c.get(field_id);
 			t.set({'priority': prio})
-			t.save();
-			
-		},
-		initPriority:function(){
-				var actualPriority = $('#todoBox').is('.low') ? 1 : $('#todoBox').is('.mid') ? 2 : $('#todoBox').is('.high') ? 3 : 1;
-				$("#todoBox #left #priority").each(function(i, e){
-				$(this).slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriority});
-			})
+			t.save();	
 		},
 		setModel:function(model){
 			this.model = model;
@@ -161,10 +153,11 @@ clearTimeout(tidle);
 setTimeout(function(){window.idle = true}, inactivity);	
 });
 //*/
-
-var actualPriority = $('#todoBox').is('.low') ? 1 : $('#todoBox').is('.mid') ? 2 : $('#todoBox').is('.high') ? 3 : 1;
 	$("#todoBox #left #priority").each(function(i, e){
-	$(this).slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriority});
+		var actualPriority = $(this).parent().parent().attr('class');
+		var actualPriorityToLetter = actualPriority === 'low' ? 1 : actualPriority === 'mid' ? 2 : actualPriority === 'high' ? 3 : 1;
+		console.log(actualPriority);
+	$(this).slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriorityToLetter});
 })
 
 //$("#priority").slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriority});
