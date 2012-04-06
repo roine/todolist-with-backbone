@@ -7,8 +7,9 @@ V1.1 *coming soon*
 - Delete todo
 - priority editing with sliding bar
 - color accorded with the priority
-- order ASC *done*
+- order ASC
 - Update the UI
+- Routes
 
 
 V1 finish

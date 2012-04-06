@@ -1,6 +1,8 @@
 
 $(function(){
 
+
+
 	window.Todo = Backbone.Model.extend({
 		defaults:{
 			id:1,
@@ -40,7 +42,7 @@ $(function(){
 			this.bind('error', function(error){
 				console.log(error)
 			});
-			
+
 		},
 		events:{
 			"click #newTodo": "createTodo",
@@ -105,9 +107,10 @@ $(function(){
 		},
 		render:function(){
 			var renderedContent = this.template({all: this.collection.toJSON().reverse()});
+
 			$(this.el).html(renderedContent);
 			return this;
-			
+
 		}
 	});
 
@@ -153,10 +156,10 @@ clearTimeout(tidle);
 setTimeout(function(){window.idle = true}, inactivity);	
 });
 //*/
-	$("#todoBox #left #priority").each(function(i, e){
-		var actualPriority = $(this).parent().parent().attr('class');
-		var actualPriorityToLetter = actualPriority === 'low' ? 1 : actualPriority === 'mid' ? 2 : actualPriority === 'high' ? 3 : 1;
-		console.log(actualPriority);
+$("#todoBox #left #priority").each(function(i, e){
+	var actualPriority = $(this).parent().parent().attr('class');
+	var actualPriorityToLetter = actualPriority === 'low' ? 1 : actualPriority === 'mid' ? 2 : actualPriority === 'high' ? 3 : 1;
+	console.log(actualPriority);
 	$(this).slider({'orientation':'vertical', 'min':1, 'max':3, 'value': actualPriorityToLetter});
 })
 
